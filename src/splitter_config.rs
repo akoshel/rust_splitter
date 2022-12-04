@@ -39,7 +39,7 @@ impl SelectorConfig {
 #[derive(Debug, Deserialize)]
 pub struct ExperimentConfig {
     group: Group,
-    selector: SelectorConfig,
+    pub selector: SelectorConfig,
 }
 
 impl ExperimentConfig {

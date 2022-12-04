@@ -5,5 +5,5 @@ ratio = 0.2
 [selector]
 name = "my_selector"
 value_type = "str"
-operator = "contains"
+operator = "eq"
 value = "android"

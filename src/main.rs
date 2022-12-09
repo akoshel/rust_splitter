@@ -47,9 +47,13 @@ mod tests {
             user_id: String,
             value: String, // {"login":"my_login","password":"my_password"}
         }
-        let test_json = TestJsonData {
+        let test_json1 = TestJsonData {
             user_id: "123".to_string(),
             value: "android".to_string(),
+        }; 
+        let test_json2 = TestJsonData {
+            user_id: "123".to_string(),
+            value: "ios".to_string(),
         };
         let app = test::init_service(
             App::new()
@@ -57,13 +61,17 @@ mod tests {
                 .service(api::post_request::make_request),
         )
         .await;
-        let req = test::TestRequest::post()
+        let req1 = test::TestRequest::post()
             .uri("/request")
-            .set_json(test_json)
+            .set_json(test_json1)
             .to_request();
-        let resp = test::call_service(&app, req).await;
-        println!("{:?}", resp);
-        println!("{:?}", resp.status());
-        assert!(resp.status().is_success());
+        let req2 = test::TestRequest::post()
+            .uri("/request")
+            .set_json(test_json2)
+            .to_request();
+        let resp1 = test::call_service(&app, req1).await;
+        let resp2 = test::call_service(&app, req2).await;
+        assert!(resp1.status().is_success());
+        assert!(resp2.status().is_server_error());
     }
 }

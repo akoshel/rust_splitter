@@ -36,6 +36,7 @@ impl Selector {
     pub fn validate(&self, value: String) -> bool {
         (self.validate_operator)(&self.value, &value)
     }
+
 }
 
 #[cfg(test)]

@@ -1,18 +1,22 @@
+use std::env::split_paths;
+
 use actix_web::{
     get, post,
     web::{Data, Json},
-    HttpResponse, Responder,
+    HttpResponse, Responder, error::ResponseError
 };
-use derive_more::Display;
+use derive_more::{Display, Error};
 use serde::{Deserialize, Serialize};
 
 use crate::splitter_config;
 
-#[derive(Debug, Display)]
+#[derive(Debug, Display, Error)]
 pub enum RequestError {
     TokenezationError,
     PredictError,
 }
+
+impl ResponseError for RequestError {}
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SubmitTaskRequest {
@@ -27,7 +31,8 @@ pub async fn make_request(
 ) -> Result<Json<SubmitTaskRequest>, RequestError> {
     println!("{:?}", request);
     // let is_in_experiment = selector_state.selector.validate(&request.value);
-    match selector_state.selector.validate(&request.value) {
+    let experiment_input = splitter_config::ExperimentInput::new(&request.user_id, &request.value);
+    match selector_state.selector.validate(&experiment_input) {
         true => Ok(request),
         _ => Err(RequestError::PredictError),
     }

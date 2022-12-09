@@ -1,6 +1,7 @@
 [group]
 name = "name"
 ratio = 0.2
+meta_data = "http://localhost:8000"
 
 [selector]
 name = "my_selector"
